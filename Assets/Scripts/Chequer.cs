@@ -79,14 +79,14 @@ public class Chequer : MonoBehaviour {
     //        else return false;
     //}
 
-    bool IsTwoFieldMovement (Vector3 translation) // trzeba będzie dodać sprawdzenie z którym graczem mamy doczynienia i odpowiednie dopasowanie warunku
-    {
-        if (translation.x == -2 && translation.x == -2 || translation.x == 2 && translation.y == 2)
-        {
-            return true;
-        }
-        else return false;
-    }
+    //bool IsTwoFieldMovement (Vector3 translation) // trzeba będzie dodać sprawdzenie z którym graczem mamy doczynienia i odpowiednie dopasowanie warunku
+    //{
+    //    if (translation.x == -2 && translation.x == -2 || translation.x == 2 && translation.y == 2)
+    //    {
+    //        return true;
+    //    }
+    //    else return false;
+    //}
 
     //bool IsPositionInGameField()
     //{
