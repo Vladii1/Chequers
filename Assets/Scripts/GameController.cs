@@ -118,30 +118,38 @@ public class GameController : MonoBehaviour {
 
 
 
-    public Vector3 IsThisMovePossible(int chequerIndex, Vector3 startPos)
+    public Vector3 IsThisMovePossible(int chequerIndex, Vector3 startPos, bool isWhite)
     {
 
         movingChequer = FindMovingChequer(chequerIndex);
 
         chequerRoundedPosition = RoundUpPositionToInt(movingChequer.gameObject.transform.position);
-        print(chequerRoundedPosition);
-        Field targetField = fields[Mathf.RoundToInt(chequerRoundedPosition.x), Mathf.RoundToInt(chequerRoundedPosition.y)];
-        Field startField = fields[Mathf.RoundToInt(startPos.x), Mathf.RoundToInt(startPos.y)]; 
-        if (targetField == true) return startPos;
-        else 
+        //print(chequerRoundedPosition);
+        int chequerIntPosX = Mathf.RoundToInt(chequerRoundedPosition.x);
+        int chequerIntPosY = Mathf.RoundToInt(chequerRoundedPosition.y);
+
+        print(fields.GetLength(0) + " " + fields.GetLength(1));
+
+        if (chequerIntPosX <= fields.GetLength(0) -1  && chequerIntPosY <= fields.GetLength(1) -1 && chequerIntPosX >= 0 && chequerIntPosY >= 0)
         {
-            if (IsChequerPositionInGameField(chequerRoundedPosition) == true)
+            print("tutaj");
+            Field targetField = fields[chequerIntPosX, chequerIntPosY];
+            if (targetField.isActive == true && targetField.isFull == false)
             {
                 chequerTranslation = CheckMovementDistance(chequerRoundedPosition, startPos);
                 if (IsOneFieldForwardMovement(chequerTranslation, movingChequer) == true) return chequerRoundedPosition;
-
-                else if (IsTwoFieldForwardMovement(chequerTranslation, movingChequer) == true) return chequerRoundedPosition;
-
+                else if (IsTwoFieldForwardMovement(chequerTranslation, movingChequer) == true)
+                {
+                    if (IsOposingChequerOnTheWay(startPos, chequerRoundedPosition, movingChequer) == true) return chequerRoundedPosition;
+                    else return startPos;
+                }
                 else return startPos;
             }
             else return startPos;
         }
-       
+        else return startPos;
+
+        //Field startField = fields[Mathf.RoundToInt(startPos.x), Mathf.RoundToInt(startPos.y)];
     }
 
 
@@ -203,5 +211,17 @@ public class GameController : MonoBehaviour {
             return true;
         }
         else return false;
+    }
+    bool IsOposingChequerOnTheWay(Vector3 startPos, Vector3 targetPos, Chequer movingChequer)
+    {
+        float betweenPosX = (startPos.x + targetPos.x)/2;
+        float betweenPosY = (startPos.y + targetPos.y)/2;
+        print(betweenPosX + ", " + betweenPosY);
+        Field betweenField = fields[Mathf.RoundToInt(betweenPosX), Mathf.RoundToInt(betweenPosY)];
+        //Destroy(betweenField);
+        if (betweenField.hasWhite == true && movingChequer.isWhite == false) return true;
+        else if (betweenField.hasWhite == false && movingChequer.isWhite == true) return true;
+        else return false;
+        //print("between.hasWhite" + betweenField.hasWhite);
     }
 }
